@@ -1,3 +1,4 @@
+#This is to find whether the scraped URLs are unique or not 
 with open('Indore_restaurant_details.txt','rb+') as f:
     seen = set()
     i = 1 
