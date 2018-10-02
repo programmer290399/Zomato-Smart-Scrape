@@ -19,7 +19,7 @@ try:
 except Exception as error:
     print(error)
 
-out_file = open("Indore_restaurant_details.txt", "ab")
+out_file = open("Indore_restaurant_details.txt", "rb+")
 
 
 class ZomatoRestaurantLinkGen:
@@ -44,7 +44,9 @@ class ZomatoRestaurantLinkGen:
     def scrap(self):
         soup = self.soup
         for tag in soup.find_all("a", attrs={'data-result-type': 'ResCard_Name'}):
-            out_file.write(tag['href'].encode('utf-8').strip() + b'\n')
+            # if str(tag['href'].encode('utf-8').strip()) not in  out_file.read().replace('\n', '').encode('utf-8').strip() :   
+                out_file.write(tag['href'].encode('utf-8').strip() + b'\n')
+        
 
 
 if __name__ == '__main__':
@@ -52,7 +54,7 @@ if __name__ == '__main__':
         print("Selenium not opened")
         sys.exit()
 
-    for x in range(1, 564):
+    for x in range(1, 53):
         print(str(x) + '\n')
         zr = ZomatoRestaurantLinkGen('https://www.zomato.com/indore/restaurants?page={}'.format(x))
         zr.scrap()
