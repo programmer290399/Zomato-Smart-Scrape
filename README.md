@@ -6,7 +6,7 @@ Dependencies: Selenium, Gecko Driver, firefox, bs4, Python 3.6
 Run
 >>> python restaurant_list_link_generator
 
-It creates a txt file with all zomato restaurant links in Bengaluru.
+It creates a txt file with all zomato restaurant links in Indore.
 
 Now,
 >>> python restaurant_scraper
