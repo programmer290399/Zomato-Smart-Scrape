@@ -12,6 +12,7 @@ from selenium import webdriver
 from bs4 import NavigableString
 import sys
 import json
+import time 
 
 browser = None
 try:
@@ -27,7 +28,9 @@ class ZomatoRestaurant:
         self.html_text = None
         try:
             browser.get(self.url)
+            time.sleep(5)
             self.html_text = browser.page_source
+
             # self.html_text = urllib.request.urlopen(url).read().decode('utf-8')
             # self.html_text = requests.get(url).text
         except Exception as err:
@@ -38,6 +41,7 @@ class ZomatoRestaurant:
 
         self.soup = None
         if self.html_text is not None:
+            print(self.html_text)
             self.soup = BeautifulSoup(self.html_text, 'lxml')
 
     def scrap(self):
@@ -46,29 +50,23 @@ class ZomatoRestaurant:
         soup = self.soup
         menu_details = dict()
 
-        name_anchor = soup.find("a", attrs={"class": "o2header-title"})
+        name_anchor = soup.find('a', attrs={'class': 'o2header-title'})
         if name_anchor:
             menu_details['restaurant_name'] = name_anchor.text.strip()
         else:
             menu_details['restaurant_name'] = ''
 
 
-        # rest_details['what_people_love_here'] = []
-        # for div in soup.find_all("div", attrs={'class': 'rv_highlights__section pr10'}):
-        #     child_div = div.find("div", attrs={'class': 'grey-text'})
-        #     if child_div:
-        #         rest_details['what_people_love_here'].append(child_div.get_text())
-        # return rest_details
-
-
         menu_details['dish_mappings'] = []
-        for div in soup.find_all("div", attrs={'class': 'ui item item-view'}):
+        for div in soup.find_all("div", attrs={'class': 'col-s-10 col-m-13'}):
             child_div_dish_name = div.find("div", attrs={'class': 'header'})
             child_div_dish_price = div.find("div", attrs={'class': 'description'})
-            menu_details['dish_detail']=[]
+
             if child_div_dish_name:
-                dish_detail['dish_name'].append(child_div_dish_name.get_text())
-                dish_detail['dish_price'].append(child_div_dish_price.get_text())
+                dish_detail = dict()
+                dish_detail['dish_name'] = child_div_dish_name.text.strip() 
+                dish_detail['dish_price'] = child_div_dish_price.text.strip()
+                menu_details['dish_mappings'].append(dish_detail)
         return menu_details
 
 
