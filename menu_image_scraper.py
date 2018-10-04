@@ -18,8 +18,7 @@ from selenium.webdriver.support import expected_conditions as EC
 def download(url):
     urllib.request.urlretrieve(url, url.split('/')[-1])
 
-def url_generator(url,x):
-    return (url[:-7]+'?page{}#men=utop'.format(x))
+
 browser = None
 try:
     browser = webdriver.Firefox()
@@ -47,7 +46,7 @@ class Image_finder:
 
         self.soup = None
         if self.html_text is not None:
-            #print(self.html_text)
+            
             self.soup = BeautifulSoup(self.html_text, 'lxml')
 
     
@@ -63,8 +62,7 @@ class Image_finder:
         list_len = int(list_len.text.strip().split()[3])
         for i in range(1,list_len):
             
-            #element = WebDriverWait(browser , 10).until(EC.presence_of_element_located((By.ID, "myDynamicElement")))
-            #element.click()
+
             html_text = browser.page_source
             soup = BeautifulSoup(html_text, 'lxml')
             
@@ -80,5 +78,4 @@ class Image_finder:
 
 if __name__ == '__main__':
     img = Image_finder('https://www.zomato.com/indore/o2-cafe-de-la-ville-new-palasia/menu#tabtop')
-    #https://www.zomato.com/indore/o2-cafe-de-la-ville-new-palasia/menu?page3#men=utop
     img.scrap_image()
