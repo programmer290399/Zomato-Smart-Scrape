@@ -13,6 +13,7 @@ from bs4 import NavigableString
 import sys
 import json
 import time 
+import locale
 
 browser = None
 try:
@@ -41,7 +42,7 @@ class ZomatoRestaurant:
 
         self.soup = None
         if self.html_text is not None:
-            print(self.html_text)
+            #print(self.html_text)
             self.soup = BeautifulSoup(self.html_text, 'lxml')
 
     def scrap(self):
@@ -64,8 +65,9 @@ class ZomatoRestaurant:
 
             if child_div_dish_name:
                 dish_detail = dict()
+                trim = re.compile(r'[^\d.,]+')
                 dish_detail['dish_name'] = child_div_dish_name.text.strip() 
-                dish_detail['dish_price'] = child_div_dish_price.text.strip()
+                dish_detail['dish_price'] = trim.sub('',child_div_dish_price.text.strip())
                 menu_details['dish_mappings'].append(dish_detail)
         return menu_details
 
