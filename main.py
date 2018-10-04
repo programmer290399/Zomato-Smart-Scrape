@@ -250,7 +250,7 @@ if __name__ == '__main__':
         print("Selenium not opened")
         sys.exit()
 
-    for x in range(1, 2):
+    for x in range(1, 53):
         print(str(x) + '\n')
         zr = ZomatoRestaurantLinkGen('https://www.zomato.com/indore/restaurants?page={}'.format(x))
         zr.scrap_rest_links()
