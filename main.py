@@ -1,6 +1,4 @@
-"""
-Python class to scrap link of every restaurant whose zomato page link is given
-"""
+
 import re
 import urllib
 from urllib import parse
@@ -16,6 +14,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
+from google_images_download import google_images_download 
 
 browser = None
 
@@ -144,10 +143,16 @@ class ZomatoRestaurant:
 
             if child_div_dish_name:
                 dish_detail = dict()
+                dish_detail['Image-URLs'] = list()
                 trim = re.compile(r'[^\d.,]+')
                 dish_detail['dish_name'] = child_div_dish_name.text.strip() 
                 dish_detail['dish_price'] = trim.sub('',child_div_dish_price.text.strip())
                 menu_details['dish_mappings'].append(dish_detail)
+                response = google_images_download.googleimagesdownload()   
+                item = child_div_dish_name.text.strip()
+                arguments = {"keywords": item ,"limit":1 ,"print_urls":True}  
+                paths = response.download(arguments)   
+                dish_detail['Image-URLs'].append(paths)  
         return menu_details
         
     def scrap_rest_detail(self):
@@ -250,7 +255,7 @@ if __name__ == '__main__':
         print("Selenium not opened")
         sys.exit()
 
-    for x in range(1, 53):
+    for x in range(1, 2):
         print(str(x) + '\n')
         zr = ZomatoRestaurantLinkGen('https://www.zomato.com/indore/restaurants?page={}'.format(x))
         zr.scrap_rest_links()
