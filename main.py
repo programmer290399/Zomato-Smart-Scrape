@@ -150,7 +150,7 @@ class ZomatoRestaurant:
                 dish_detail['dish_name'] = child_div_dish_name.text.strip() 
                 dish_detail['dish_price'] = trim.sub('',child_div_dish_price.text.strip())
                 menu_details['dish_mappings'].append(dish_detail)
-                if child_div_dish_type_veg :
+                if child_div_dish_type_veg : # added The new feature , successfully tested for nafees 
                     dish_detail['type'] = 'Veg'
                 elif child_div_dish_type_non_veg :
                     dish_detail['type'] = 'Non-veg'
