@@ -140,6 +140,8 @@ class ZomatoRestaurant:
         for div in soup.find_all("div", attrs={'class': 'col-s-10 col-m-13'}):
             child_div_dish_name = div.find("div", attrs={'class': 'header'})
             child_div_dish_price = div.find("div", attrs={'class': 'description'})
+            child_div_dish_type_veg = div.find("div", attrs={"class":"veg tag left"}) 
+            child_div_dish_type_non_veg = div.find("div", attrs={"class":"nveg tag left"})
 
             if child_div_dish_name:
                 dish_detail = dict()
@@ -148,6 +150,10 @@ class ZomatoRestaurant:
                 dish_detail['dish_name'] = child_div_dish_name.text.strip() 
                 dish_detail['dish_price'] = trim.sub('',child_div_dish_price.text.strip())
                 menu_details['dish_mappings'].append(dish_detail)
+                if child_div_dish_type_veg :
+                    dish_detail['type'] = 'Veg'
+                elif child_div_dish_type_non_veg :
+                    dish_detail['type'] = 'Non-veg'
                 response = google_images_download.googleimagesdownload()   
                 item = child_div_dish_name.text.strip()
                 arguments = {"keywords": item ,"limit":1 ,"print_urls":True}  
