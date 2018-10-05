@@ -142,6 +142,8 @@ class ZomatoRestaurant:
             child_div_dish_price = div.find("div", attrs={'class': 'description'})
             child_div_dish_type_veg = div.find("div", attrs={"class":"veg tag left"}) 
             child_div_dish_type_non_veg = div.find("div", attrs={"class":"nveg tag left"})
+            heading = child_div_dish_name.find_parent("div",attrs={"ui divided items mbot0 category"}).previous_sibling
+
 
             if child_div_dish_name:
                 dish_detail = dict()
@@ -154,6 +156,8 @@ class ZomatoRestaurant:
                     dish_detail['type'] = 'Veg'
                 elif child_div_dish_type_non_veg :
                     dish_detail['type'] = 'Non-veg'
+                if heading :
+                    dish_detail['dish_category'] = heading.text.strip()
                 response = google_images_download.googleimagesdownload()   
                 item = child_div_dish_name.text.strip()
                 arguments = {"keywords": item ,"limit":1 ,"print_urls":True}  
