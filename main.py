@@ -1,4 +1,4 @@
-
+import os 
 import re
 import urllib
 from urllib import parse
@@ -25,8 +25,11 @@ except Exception as error:
 
 out_file = open("Indore_restaurant_links.txt", "wb+")
 
-def download(url):
-    urllib.request.urlretrieve(url, url.split('/')[-1])
+def download(url,folder_name):
+    newpath = r'./{}'.format(folder_name) 
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    urllib.request.urlretrieve(url, r'./{}/{}'.format(folder_name,url.split('/')[-1]))
 
 class Image_finder:
     def __init__(self, url):
@@ -58,6 +61,7 @@ class Image_finder:
             return {}
         soup = self.soup
 
+        rest_name = soup.find("a",attrs={"class":"ui large header left"}).text.strip()
 
         list_len = soup.find('div', attrs={'class': 'pagination-meta left'})
         list_len = int(list_len.text.strip().split()[3])
@@ -71,7 +75,7 @@ class Image_finder:
             div = soup.find('div', attrs={"id":"menu-image"})
             image = div.find('img') 
             print("Downloading:" ,image['src'])
-            download(image['src'])
+            download(image['src'],rest_name)
             time.sleep(5)
             wait = WebDriverWait(browser , 10)
             element = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="menu-next-page"]')))
