@@ -62,7 +62,10 @@ class Image_finder:
         soup = self.soup
 
         rest_name = soup.find("a",attrs={"class":"ui large header left"}).text.strip()
-
+        
+        menu_image_URLs = dict()        
+        menu_image_URLs[rest_name] = list()
+        
         list_len = soup.find('div', attrs={'class': 'pagination-meta left'})
         list_len = int(list_len.text.strip().split()[3])
         for i in range(1,list_len):
@@ -76,10 +79,12 @@ class Image_finder:
             image = div.find('img') 
             print("Downloading:" ,image['src'])
             download(image['src'],rest_name)
+            menu_image_URLs[rest_name].append(image['src'])
             time.sleep(5)
             wait = WebDriverWait(browser , 10)
             element = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="menu-next-page"]')))
             element.click()
+        return menu_image_URLs
 
 class ZomatoRestaurantLinkGen:
     def __init__(self, url):
@@ -291,10 +296,14 @@ if __name__ == '__main__':
             out_file.write('\n')
     out_file.close()
 
+    out_file = open("zomato_menu_image_links.json", "a")
     with open("Indore_restaurant_links.txt", "r", encoding="utf-8") as f:
         for line in f:
             img = Image_finder(line +'/menu#tabtop')
-            img.scrap_image()
+            json.dump(img.scrap_image(), out_file)
+            out_file.write('\n')
+    out_file.close()
+    browser.close()
 
 
 
