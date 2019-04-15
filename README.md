@@ -4,7 +4,7 @@ Accessing Zomato Data: Selenium, BS4 and some python hacks!
 Dependencies: Selenium, Gecko Driver, firefox, bs4, Python 3.6
 
 Run
->>> main.py
+>>> main_noBS4.py
 
 It will scrape all the zomato indore data and make two JSON files , one having restaurant information and other having menu information mapped with respective restaurants . The menu images would also be downloaded .
 
